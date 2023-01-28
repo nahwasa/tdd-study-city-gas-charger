@@ -17,8 +17,8 @@ public class CityGasChargeTest {
         long unitPrice = 5;
         long usage = 10;
         CityGasUser user = new CityGasUser(unitPrice, usage);
-        CityGasUserService cityGasUserService = new CityGasUserService();
-        CityGasChargeService cityGasChargeService = new CityGasChargeService();
+        CityGasUserService cityGasUserService = new CityGasUserService(repository);
+        CityGasChargeService cityGasChargeService = new CityGasChargeService(cityGasUserService);
 
         // when
         cityGasUserService.add(user);
