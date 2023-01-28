@@ -1,7 +1,7 @@
 package com.nahwasa.study.tdd.citygas;
 
-import com.nahwasa.study.tdd.citygas.charge.AbstractCityGasChargeService;
 import com.nahwasa.study.tdd.citygas.charge.CityGasChargeService;
+import com.nahwasa.study.tdd.citygas.charge.RegularCityGasChargeService;
 import com.nahwasa.study.tdd.citygas.charge.VulnerableCityGasChargeService;
 import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserRepository;
@@ -34,7 +34,7 @@ public class CityGasChargeTest {
         long usage = 10;
         CityGasUser user = new CityGasUser(unitPrice, usage);
         CityGasUserService cityGasUserService = new CityGasUserService(repository);
-        AbstractCityGasChargeService cityGasChargeService = new CityGasChargeService(cityGasUserService);
+        CityGasChargeService cityGasChargeService = new RegularCityGasChargeService(cityGasUserService);
         given(repository.findById(1L)).willReturn(Optional.of(user));
 
         // when
@@ -55,7 +55,8 @@ public class CityGasChargeTest {
         long usage = 10;
         CityGasUser user = new CityGasUser(unitPrice, usage);
         CityGasUserService cityGasUserService = new CityGasUserService(repository);
-        AbstractCityGasChargeService cityGasChargeService = new VulnerableCityGasChargeService(cityGasUserService);
+        int discountRate = 20;
+        CityGasChargeService cityGasChargeService = new VulnerableCityGasChargeService(cityGasUserService, discountRate);
         given(repository.findById(1L)).willReturn(Optional.of(user));
 
         // when

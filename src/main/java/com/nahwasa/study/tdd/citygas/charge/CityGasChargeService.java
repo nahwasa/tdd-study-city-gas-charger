@@ -3,17 +3,21 @@ package com.nahwasa.study.tdd.citygas.charge;
 import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserService;
 
-public class CityGasChargeService extends AbstractCityGasChargeService {
+import java.util.Optional;
 
-    public CityGasChargeService(CityGasUserService cityGasUserService) {
-        super(cityGasUserService);
+public abstract class CityGasChargeService {
+    private final CityGasUserService cityGasUserService;
+
+    protected CityGasChargeService(CityGasUserService cityGasUserService) {
+        this.cityGasUserService = cityGasUserService;
     }
 
-    @Override
-    public long calculateEachCharge(CityGasUser user) {
-        long unitPrice = user.getUnitPrice();
-        long usage = user.getUsage();
+    public long calculateCharge(long targetUserId) {
+        Optional<CityGasUser> findUser = cityGasUserService.findUserById(targetUserId);
+        CityGasUser user = findUser.orElseThrow(() -> new IllegalArgumentException("해당 유저 없어요!"));
 
-        return unitPrice * usage;
+        return calculateEachCharge(user);
     }
+
+    public abstract long calculateEachCharge(CityGasUser user);
 }

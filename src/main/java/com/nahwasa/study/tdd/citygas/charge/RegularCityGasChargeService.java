@@ -3,12 +3,10 @@ package com.nahwasa.study.tdd.citygas.charge;
 import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserService;
 
-public class VulnerableCityGasChargeService extends CityGasChargeService {
-    private final int discountRate;
+public class RegularCityGasChargeService extends CityGasChargeService {
 
-    public VulnerableCityGasChargeService(CityGasUserService cityGasUserService, int discountRate) {
+    public RegularCityGasChargeService(CityGasUserService cityGasUserService) {
         super(cityGasUserService);
-        this.discountRate = discountRate;
     }
 
     @Override
@@ -16,6 +14,6 @@ public class VulnerableCityGasChargeService extends CityGasChargeService {
         long unitPrice = user.getUnitPrice();
         long usage = user.getUsage();
 
-        return unitPrice * usage * (100-discountRate) / 100;
+        return unitPrice * usage;
     }
 }
