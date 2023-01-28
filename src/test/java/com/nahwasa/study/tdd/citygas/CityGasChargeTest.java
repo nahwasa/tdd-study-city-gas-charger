@@ -1,5 +1,8 @@
-package com.nahwasa.study.tdd.citygascharger;
+package com.nahwasa.study.tdd.citygas;
 
+import com.nahwasa.study.tdd.citygas.charge.CityGasChargeService;
+import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
+import com.nahwasa.study.tdd.citygas.user.CityGasUserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +17,15 @@ public class CityGasChargeTest {
         long unitPrice = 5;
         long usage = 10;
         CityGasUser user = new CityGasUser(unitPrice, usage);
+        CityGasUserService cityGasUserService = new CityGasUserService();
         CityGasChargeService cityGasChargeService = new CityGasChargeService();
 
         // when
+        cityGasUserService.add(user);
         long targetUserId = 1L;
-        long charge = cityGasCharge.calculateCharge(targetUserId);
+        long result = cityGasChargeService.calculateCharge(targetUserId);
 
         // then
-        Assertions.assertThat(charge).isEqualTo(50L);
+        Assertions.assertThat(result).isEqualTo(50L);
     }
 }
