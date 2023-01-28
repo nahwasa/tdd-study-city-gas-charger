@@ -1,6 +1,7 @@
 package com.nahwasa.study.tdd.citygas;
 
 import com.nahwasa.study.tdd.citygas.charge.CityGasChargeService;
+import com.nahwasa.study.tdd.citygas.domain.CityGasChargeType;
 import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserRepository;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserService;
@@ -38,10 +39,31 @@ public class CityGasChargeTest {
         // when
         cityGasUserService.add(user);
         long targetUserId = 1L;
-        long result = cityGasChargeService.calculateCharge(targetUserId);
+        long result = cityGasChargeService.calculateCharge(targetUserId, CityGasChargeType.REGULAR);
 
         // then
         then(repository).should(times(1)).save(user);
         Assertions.assertThat(result).isEqualTo(50L);
+    }
+
+    @Test
+    @DisplayName("취약계층에겐 20% 할인을 해줘야 한다.")
+    void vulnerable_city_gas_charge() {
+        // given
+        long unitPrice = 5;
+        long usage = 10;
+        CityGasUser user = new CityGasUser(unitPrice, usage);
+        CityGasUserService cityGasUserService = new CityGasUserService(repository);
+        CityGasChargeService cityGasChargeService = new CityGasChargeService(cityGasUserService);
+        given(repository.findById(1L)).willReturn(Optional.of(user));
+
+        // when
+        cityGasUserService.add(user);
+        long targetUserId = 1L;
+        long result = cityGasChargeService.calculateCharge(targetUserId, CityGasChargeType.VULNERABLE);
+
+        // then
+        then(repository).should(times(1)).save(user);
+        Assertions.assertThat(result).isEqualTo(40L);
     }
 }
