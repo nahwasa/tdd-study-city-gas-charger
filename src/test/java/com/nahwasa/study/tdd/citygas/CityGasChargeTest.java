@@ -1,7 +1,7 @@
 package com.nahwasa.study.tdd.citygas;
 
 import com.nahwasa.study.tdd.citygas.charge.CityGasChargeService;
-import com.nahwasa.study.tdd.citygas.domain.CityGasChargeType;
+import com.nahwasa.study.tdd.citygas.charge.VulnerableCityGasChargeService;
 import com.nahwasa.study.tdd.citygas.domain.CityGasUser;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserRepository;
 import com.nahwasa.study.tdd.citygas.user.CityGasUserService;
@@ -39,7 +39,7 @@ public class CityGasChargeTest {
         // when
         cityGasUserService.add(user);
         long targetUserId = 1L;
-        long result = cityGasChargeService.calculateCharge(targetUserId, CityGasChargeType.REGULAR);
+        long result = cityGasChargeService.calculateCharge(targetUserId);
 
         // then
         then(repository).should(times(1)).save(user);
@@ -54,13 +54,13 @@ public class CityGasChargeTest {
         long usage = 10;
         CityGasUser user = new CityGasUser(unitPrice, usage);
         CityGasUserService cityGasUserService = new CityGasUserService(repository);
-        CityGasChargeService cityGasChargeService = new CityGasChargeService(cityGasUserService);
+        CityGasChargeService cityGasChargeService = new VulnerableCityGasChargeService(cityGasUserService);
         given(repository.findById(1L)).willReturn(Optional.of(user));
 
         // when
         cityGasUserService.add(user);
         long targetUserId = 1L;
-        long result = cityGasChargeService.calculateCharge(targetUserId, CityGasChargeType.VULNERABLE);
+        long result = cityGasChargeService.calculateCharge(targetUserId);
 
         // then
         then(repository).should(times(1)).save(user);
